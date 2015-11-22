@@ -1,0 +1,43 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+
+<?php 
+	//https://gist.github.com/delarosajf/57f8a04cb73bdb201a9d
+
+$actual = date("m"); //11
+$ini=$_POST['ini'];
+	if (!isset($_POST['ms']) && !isset($_POST['ma']) && !isset($_POST['mp']))
+	{
+		$ini=$actual;
+	}
+	else{
+		if (isset($_POST['ms']))
+		{
+			
+			$ini=$actual;
+		}
+		elseif (isset($_POST['ma']))
+		{
+			$ini--;
+			
+		}
+			elseif (isset($_POST['mp']))
+		{
+			$ini++;
+		
+		}
+		else {echo 'nada';}
+	}
+?>
+
+
+		
+
+
+</body>
+</html>
