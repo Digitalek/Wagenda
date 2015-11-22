@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+
+
+<?php 
+	
+//aplicar zona horaria de formulario 
+
+		
+
+		if (empty($_POST['so']))
+		{
+			$zona_horaria='Zona horaria sin definir';
+
+		}
+		else{
+			$timez = $_POST['so'];
+			date_default_timezone_set($timez);
+			echo 'tu zona horaria es '.$timez;	
+		}
+		
+		
+		
+	
+
+//obtener variables de fecha y hora servidor
+	
+	$dia=date("j"); // dia del mes en numero
+	$mes=date("n"); // mes en numero
+	$ano=date("Y"); // ano en numero
+	$hora=date("G"); //hora
+	$min=date("i"); //minuto
+	$seg=date("s"); //segundo	
+	
+	
+
+?>
+<html>
+	<head>
+		<title></title>
+
+
+
+<!--responsive-->
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta charset="utf-8">
+		<link rel="stylesheet" type="text/css" href="CSS.css"/>	
+
+		
+<!--AJAX-->
+	<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+
+
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+	<script type="text/javascript" src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
+
+<!--obtener ip/zona horaria-->
+
+	
+
+
+<!--reloj JS-->
+
+		<script type="text/javascript">
+		$(document).ready(function() {
+		// Create two variable with the names of the months and days in an array
+		var monthNames = [ "de Enero del", "de Febrero del", "de Marzo del", "de Abril del", "de Mayo del", "de Junio del", "de Julio del", "de Agosto del", "de Septiembre del", "de Octubre del", "de Noviembre del", "de Diciembre del" ]; 
+		var dayNames= ["Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","Sabado"]
+
+		// Create a newDate() object
+		var newDate = new Date();
+		// Extract the current date from Date object
+		newDate.setDate(newDate.getDate());
+		// Output the day, date, month and year   
+		$('#Date').html(dayNames[newDate.getDay()] + " " + newDate.getDate() + ' ' + monthNames[newDate.getMonth()] + ' ' + newDate.getFullYear());
+
+		setInterval( function() {
+			// Create a newDate() object and extract the seconds of the current time on the visitor's
+			var seconds = new Date().getSeconds();
+			// Add a leading zero to seconds value
+			$("#sec").html(( seconds < 10 ? "0" : "" ) + seconds);
+			},1000);
+			
+		setInterval( function() {
+			// Create a newDate() object and extract the minutes of the current time on the visitor's
+			var minutes = new Date().getMinutes();
+			// Add a leading zero to the minutes value
+			$("#min").html(( minutes < 10 ? "0" : "" ) + minutes);
+		    },1000);
+			
+		setInterval( function() {
+			// Create a newDate() object and extract the hours of the current time on the visitor's
+			var hours = new Date().getHours();
+			// Add a leading zero to the hours value
+			$("#hours").html(( hours < 10 ? "0" : "" ) + hours);
+		    }, 1000);	
+		});
+		</script>
+
+	</head>
+	<body>
+
+		
+		<div id="caja">
+			<header>
+				<hgroup>
+					<h1>Wagenda</h1>
+					<h2>Tu agenda online</h2>
+				</hgroup>
+			</header>
+
+			<section> <!--muestra Fecha-->
+				<div class="clock">
+					 <ul>
+					 	<li id="Date"></li>
+					 </ul>
+				</div>
+			</section>
+		
+			<section> 	<!--muestra reloj JS-->
+				<div class="clock">
+					  <ul>
+					      <li id="hours"></li>
+					      <li id="point">:</li>
+					      <li id="min"></li>
+					      <li id="point">:</li>
+					      <li id="sec"></li>
+					  </ul>
+				</div>
+			</section>
+			<section>
+				<div id="calendar">
+
+					<?php   //calendario 
+
+					include 'prueba_counter.php';
+					include 'funciones.php';
+
+					
+
+
+
+						$mes_num = $ini;
+						$cant_dias = evaluar_mes($mes_num, true);
+						$nombre_mes = evaluar_mes($mes_num, false);
+
+
+						$timestamp = mktime(0,0,0, $mes_num, 1, $ano);
+						$saltear = date("w",$timestamp);
+						$cant_dias += $saltear;
+
+						$filas=ceil($cant_dias/7);
+						$cant_cel=$filas*7;
+						$dif_cel=$cant_cel-$cant_dias;		
+						
+					?>
+
+					<table>
+						<thead>
+							<tr>
+								<th colspan="7"><h2><?php echo $nombre_mes.' '.$ano;?></h2></th>
+							</tr>
+							<tr id="dias">
+								<th>Dom</th><th>Lun</th><th>Mar</th><th>Mie</th><th>Jue</th><th>Vie</th><th>Sab</th>
+							</tr>
+								
+						</thead>
+						<tbody>
+							<tr>
+								<?php 
+								for ($i=1;$i<=$cant_dias;$i++) //escribe los dias 
+									{
+											if ($i<=$saltear){
+												echo '<td>-</td>';
+											}
+											else{
+											$num_dias = $i - $saltear;
+											$respuesta=verificar_feriado($num_dias,$mes_num);
+
+												if ($respuesta == true){
+													$css=' class="feriado"';
+												}
+												else{
+													$css='';
+												}
+												echo '<td'.$css.'>'.$num_dias.'</td>';
+												}
+												if ($i%7==0)
+												{
+													echo '</tr><tr>';
+												}
+									}
+								for ($i=1;$i<=$dif_cel;$i++)
+									{
+										echo '<td>-</td>';
+									}
+								?>
+							</tr>
+						</tbody>
+					</table>
+
+			</section>
+
+
+				<!-- 
+				Linea 37: si el formulario no se ha enviado $_POST['ini'] es 11.
+				Línea 39: si ya se envió, $_POST['ini'] es el nuevo valor de $ini.-->
+				
+	<form method="post" action= "<?php echo $_SERVER['PHP_SELF'];?>" id="counter" name="counter" >
+	<?php if(empty($_POST)){ ?>
+	<input type="hidden" value='<?php echo $actual; ?>' name="ini"/>
+	<?php } else{ ?>
+	<input type="hidden" value='<?php echo $ini; ?>' name="ini"/>
+	<?php } ?>
+					<table>
+						<tr>							
+							<td><input type="submit"  value='Anterior' class="boton_m" name="ma"/></td>
+							<td><input type="submit"  value='Mes actual' class="boton_m" name="ms"/></td>
+							<td><input type="submit"  value='Proximo' class="boton_m" name="mp"/></td>
+						</tr>
+					</table>
+
+
+
+				</form>
+					<center><p><?php echo $zona_horaria;
+					?> <a href="#">Click aqui para definir tu zona horaria</p></center></a>
+
+		</div>
+
+ 
+
+
+	</body>
+</html>
