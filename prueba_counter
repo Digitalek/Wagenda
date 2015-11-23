@@ -7,9 +7,10 @@
 <body>
 
 <?php 
-	//https://gist.github.com/delarosajf/57f8a04cb73bdb201a9d
+	include 'vars.php';
+	//control de calendario
 
-$actual = date("m"); //11
+
 $ini=$_POST['ini'];
 	if (!isset($_POST['ms']) && !isset($_POST['ma']) && !isset($_POST['mp']))
 	{
@@ -24,15 +25,33 @@ $ini=$_POST['ini'];
 		elseif (isset($_POST['ma']))
 		{
 			$ini--;
-			
+		
+				
 		}
-			elseif (isset($_POST['mp']))
+		elseif (isset($_POST['mp']))
 		{
 			$ini++;
-		
+				
 		}
 		else {echo 'nada';}
 	}
+
+		//cambio de año
+	
+		if($ini>12)
+				{
+
+				$ini=1; //regresamos a enero
+				$ano=$ano+1; //sumamos un año
+				}
+
+		if ($ini<1) 
+				{
+				$ini=12; //regresamos a diciembre
+				$ano=$ano-1; //restamos un año
+				}
+
+
 ?>
 
 
@@ -41,3 +60,5 @@ $ini=$_POST['ini'];
 
 </body>
 </html>
+
+
