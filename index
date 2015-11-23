@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 
 
@@ -22,14 +24,6 @@
 		
 	
 
-//obtener variables de fecha y hora servidor
-	
-	$dia=date("j"); // dia del mes en numero
-	$mes=date("n"); // mes en numero
-	$ano=date("Y"); // ano en numero
-	$hora=date("G"); //hora
-	$min=date("i"); //minuto
-	$seg=date("s"); //segundo	
 	
 	
 
@@ -38,13 +32,11 @@
 	<head>
 		<title></title>
 
-
-
-<!--responsive-->
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta charset="utf-8">
 		<link rel="stylesheet" type="text/css" href="CSS.css"/>	
 
+<!--responsive-->
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		
 <!--AJAX-->
 	<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
@@ -53,9 +45,7 @@
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 	<script type="text/javascript" src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
 
-<!--obtener ip/zona horaria-->
 
-	
 
 
 <!--reloj JS-->
@@ -127,30 +117,28 @@
 					  </ul>
 				</div>
 			</section>
-			<section>
+			<section>	<!--calendario-->
 				<div id="calendar">
-
-					<?php   //calendario 
+					
+					<?php   
 
 					include 'prueba_counter.php';
 					include 'funciones.php';
+				
 
 					
+					$mes_num = $ini;
+					$cant_dias = evaluar_mes($mes_num, true);
+					$nombre_mes = evaluar_mes($mes_num, false);
 
+					$timestamp = mktime(0,0,0, $mes_num, 1, $ano);
+					$saltear = date("w",$timestamp);
+					$cant_dias += $saltear;
+					
+					$filas=ceil($cant_dias/7);
+					$cant_cel=$filas*7;
+					$dif_cel=$cant_cel-$cant_dias;		
 
-
-						$mes_num = $ini;
-						$cant_dias = evaluar_mes($mes_num, true);
-						$nombre_mes = evaluar_mes($mes_num, false);
-
-
-						$timestamp = mktime(0,0,0, $mes_num, 1, $ano);
-						$saltear = date("w",$timestamp);
-						$cant_dias += $saltear;
-
-						$filas=ceil($cant_dias/7);
-						$cant_cel=$filas*7;
-						$dif_cel=$cant_cel-$cant_dias;		
 						
 					?>
 
@@ -182,17 +170,20 @@
 												else{
 													$css='';
 												}
-												echo '<td'.$css.'>'.$num_dias.'</td>';
+												echo '<td'.$css.'><a href="#">'.$num_dias.'</a></td>';
 												}
 												if ($i%7==0)
 												{
 													echo '</tr><tr>';
 												}
 									}
-								for ($i=1;$i<=$dif_cel;$i++)
+									for ($i=1;$i<=$dif_cel;$i++)
 									{
 										echo '<td>-</td>';
 									}
+
+
+
 								?>
 							</tr>
 						</tbody>
@@ -222,8 +213,20 @@
 
 
 				</form>
-					<center><p><?php echo $zona_horaria;
-					?> <a href="#">Click aqui para definir tu zona horaria</p></center></a>
+					<center><p>
+					<?php
+					
+						echo '$ini='.$ini.'<br> $mes_num= '.$mes_num.'<br>';
+						echo '$ano='.$ano.'<br>';
+						echo 'timestamp= '.$timestamp.'<br>';
+						
+					
+
+					echo $zona_horaria;
+					?> 
+					<a href="form.php">Click aqui para definir tu zona horaria</p></center></a> 
+					<br>
+					
 
 		</div>
 
