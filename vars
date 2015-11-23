@@ -1,0 +1,12 @@
+
+<?php
+//obtener variables de fecha y hora servidor
+	
+	$dia=date("j"); // dia del mes en numero
+	$mes=date("n"); // mes en numero
+	$ano=date("Y"); // ano en numero
+	$hora=date("G"); //hora
+	$min=date("i"); //minuto
+	$seg=date("s"); //segundo	
+
+?>
